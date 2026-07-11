@@ -52,9 +52,3 @@ export const refreshAccessToken = async (refreshToken) => {
 
     return accessToken;
 };
-
-
-export const getCurrentUser = async (userId) => {
-    return await User.findById(userId)
-        .select("-password");
-};

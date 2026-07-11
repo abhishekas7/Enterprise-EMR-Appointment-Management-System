@@ -5,10 +5,8 @@ import authenticate from "../middleware/authMiddleware.js";
 const router = Router();
 
 router.post("/login", authController.login);
-router.post("/refresh-token", authController.refreshToken);
+router.post("/refresh", authController.refreshToken);
 
 router.post("/logout", authenticate, authController.logout);
-
-router.get("/me", authenticate, authController.me);
 
 export default router;

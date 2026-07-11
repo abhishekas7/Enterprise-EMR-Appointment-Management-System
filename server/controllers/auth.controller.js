@@ -120,32 +120,3 @@ export const logout = async (req, res) => {
         meta: {},
     });
 };
-
-export const me = async (req, res) => {
-    try {
-        const user = await authService.getCurrentUser(req.user.id);
-
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "User not found",
-                data: {},
-                meta: {}
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: "User fetched successfully",
-            data: user,
-            meta: {}
-        });
-    } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-            data: {},
-            meta: {}
-        });
-    }
-};
