@@ -2,23 +2,35 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../shared/components/ui/button';
 import { Input } from '../../../shared/components/ui/input';
+import { authService } from '../../../shared/services/auth.service';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setErrorMessage('');
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await authService.login(email, password);
+      // Assuming successful login returns data with accessToken
+      if (response.success && response.data.accessToken) {
+        localStorage.setItem('accessToken', response.data.accessToken);
+        navigate('/dashboard');
+      } else {
+        setErrorMessage(response.message || 'Login failed. Please check your credentials.');
+      }
+    } catch (error) {
+      setErrorMessage(error.response?.data?.message || 'An error occurred during login.');
+    } finally {
       setIsLoading(false);
-      navigate('/dashboard');
-    }, 1000);
+    }
   };
 
   return (
