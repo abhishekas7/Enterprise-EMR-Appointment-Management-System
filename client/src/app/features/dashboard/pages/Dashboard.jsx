@@ -1,24 +1,35 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../shared/components/ui/button';
+import { authService } from '../../../shared/services/auth.service';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // Handle actual logout logic here
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+    } catch (e) {
+      console.error('Logout error', e);
+    } finally {
+      // authService.logout() already clears the in-memory token via tokenStore.clear()
+      navigate('/login');
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
       <header className="bg-white shadow-sm border-b px-8 py-4 flex items-center justify-between">
         <h1 className="text-xl font-bold text-indigo-900">EMR Dashboard</h1>
-        <Button variant="ghost" onClick={handleLogout}>
+        <Button
+          variant="ghost"
+          aria-label="Logout of your account"
+          onClick={handleLogout}
+        >
           Logout
         </Button>
       </header>
-      
+
       <main className="p-8 max-w-7xl mx-auto space-y-8">
         <section>
           <h2 className="text-2xl font-semibold mb-6">Overview</h2>
@@ -41,8 +52,19 @@ export const Dashboard = () => {
         <section>
           <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
           <div className="flex gap-4">
-            <Button onClick={() => navigate('/appointments/book')}>Book Appointment</Button>
-            <Button variant="secondary" onClick={() => navigate('/appointments')}>View Schedule</Button>
+            <Button
+              aria-label="Book a new appointment"
+              onClick={() => navigate('/appointments/book')}
+            >
+              Book Appointment
+            </Button>
+            <Button
+              variant="secondary"
+              aria-label="View appointment schedule"
+              onClick={() => navigate('/appointments')}
+            >
+              View Schedule
+            </Button>
           </div>
         </section>
       </main>
