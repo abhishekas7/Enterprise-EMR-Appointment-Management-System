@@ -29,7 +29,6 @@ export const authService = {
 
     const response = await axiosInstance.post('/api/v1/auth/login', { email, password });
 
-    // Persist the access token in memory (never in localStorage)
     if (response.data?.data?.accessToken) {
       tokenStore.set(response.data.data.accessToken);
     }
@@ -41,7 +40,6 @@ export const authService = {
     try {
       await axiosInstance.post('/api/v1/auth/logout');
     } finally {
-      // Always clear local state, even if the server call fails
       tokenStore.clear();
     }
   },
@@ -51,11 +49,6 @@ export const authService = {
     return response.data;
   },
 
-  /**
-   * Silently refresh the access token using the HttpOnly refresh-token cookie.
-   * Call this once on app boot to re-hydrate the in-memory token after a page
-   * refresh, since memory is cleared on reload.
-   */
   refreshToken: async () => {
     try {
       const response = await axiosInstance.post('/api/v1/auth/refresh');

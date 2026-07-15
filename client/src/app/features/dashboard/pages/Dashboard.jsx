@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../shared/components/ui/button';
 import { authService } from '../../../shared/services/auth.service';
@@ -12,7 +11,6 @@ export const Dashboard = () => {
     } catch (e) {
       console.error('Logout error', e);
     } finally {
-      // authService.logout() already clears the in-memory token via tokenStore.clear()
       navigate('/login');
     }
   };

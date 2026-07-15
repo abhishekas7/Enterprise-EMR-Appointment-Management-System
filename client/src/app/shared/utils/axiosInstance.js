@@ -1,11 +1,5 @@
 import axios from 'axios';
 
-// ---------------------------------------------------------------------------
-// In-memory access token store
-// Storing tokens in localStorage is vulnerable to XSS attacks. By keeping the
-// access token only in module memory, it is inaccessible to injected scripts.
-// The refresh token lives in an HttpOnly cookie set by the server.
-// ---------------------------------------------------------------------------
 let _accessToken = null;
 
 export const tokenStore = {
@@ -50,7 +44,6 @@ axiosInstance.interceptors.response.use(
     const status = error.response?.status;
 
     if (status === 401 || status === 403) {
-      // Clear the in-memory token
       tokenStore.clear();
 
       // Redirect to login only when not already there to prevent loops
